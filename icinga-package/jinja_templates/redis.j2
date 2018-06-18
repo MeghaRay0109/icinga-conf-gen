@@ -1,0 +1,78 @@
+{%for redis_dict in icinga_host.redis %}
+{% if redis_dict.port %}
+{%for p in redis_dict.port%}
+vars.redis_status["{{p}}"] = {
+  "display_name"= "{{p}}-{{redis_dict.app_name}}"
+  "app "="{{redis_dict.app_name}}"
+  "tags"= {{redis_dict.tags}}
+
+  {% if icinga_host.thresholds %}
+    {% set temp_redis = icinga_host.thresholds.redis_status.get(p|string) %}
+    
+    "used_memory_peak_human" = {
+      "redis_warning" = "{{ temp_redis.used_memory_peak_human.redis_warning }}"
+      "redis_critical" = "{{ temp_redis.used_memory_peak_human.redis_critical }}"
+    }
+
+    "connected_clients" = {
+      "redis_warning" = "{{ temp_redis.connected_clients.redis_warning }}"
+      "redis_critical" = "{{ temp_redis.connected_clients.redis_warning }}"
+    }
+
+    "rejected_connections" = {
+      "redis_warning" = "{{ temp_redis.rejected_connections.redis_warning }}"
+      "redis_critical" = "{{ temp_redis.rejected_connections.redis_critical }}"
+    }
+
+    "blocked_clients" = {
+      "redis_warning" = "{{ temp_redis.blocked_clients.redis_warning }}"
+      "redis_critical" = "{{ temp_redis.blocked_clients.redis_critical }}"
+    }
+
+    "used_cpu_user" = {
+      "redis_warning" = "{{ temp_redis.used_cpu_user.redis_warning }}"
+      "redis_critical" = "{{ temp_redis.used_cpu_user.redis_critical }}"
+    }
+
+    "used_memory_human" = {
+      "redis_warning" = "{{ temp_redis.used_memory_human.redis_warning }}"
+      "redis_critical" = "{{ temp_redis.used_memory_human.redis_critical }}"
+    }
+  {% else %}
+
+    "used_memory_peak_human" = {
+      "redis_warning" = "20000"
+      "redis_critical" = "25000"
+    }
+
+    "connected_clients" = {
+      "redis_warning" = "40"
+      "redis_critical" = "60"
+    }
+
+    "rejected_connections" = {
+      "redis_warning" = "1"
+      "redis_critical" = "2"
+    }
+
+    "blocked_clients" = {
+      "redis_warning" = "3"
+      "redis_critical" = "5"
+    }
+
+    "used_cpu_user" = {
+      "redis_warning" = "40000"
+      "redis_critical" = "50000"
+    }
+
+    "used_memory_human" = {
+      "redis_warning" = "1000000000"
+      "redis_critical" = "2000000000"
+    }
+  {% endif %}
+
+}
+{% endfor %}
+{% endif %}
+{% endfor %}
+

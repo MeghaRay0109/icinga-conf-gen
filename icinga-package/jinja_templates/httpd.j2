@@ -1,0 +1,12 @@
+ {%for httpd_dict in icinga_host.httpd %}
+ {% if httpd_dict.port %}
+ {%for p in httpd_dict.port %}		
+  vars.httpd["{{p}}"] ={
+  	"display_name" = "{{p}}-{{httpd_dict.app_name}}"
+    "app" = "{{httpd_dict.app_name}}"
+    "tags" = {{httpd_dict.tags}}
+  }
+{% endfor %}
+{% endif %}
+{% endfor %}
+

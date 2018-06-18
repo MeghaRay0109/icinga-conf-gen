@@ -1,0 +1,13 @@
+{% for tomcat_dict in icinga_host.tomcat %}
+	{% if tomcat_dict.port and tomcat_dict.jmx_port %}
+		{% for p in tomcat_dict.port %}
+			{% if p == tomcat_dict.jmx_port %}
+		    	vars.jmx["{{p}}"] = {
+		    	"display_name" = "{{p}}-{{tomcat_dict.app_name}}"
+		    	"app" = "{{tomcat_dict.app_name}}"
+		    	"tags" = {{tomcat_dict.tags}}
+				}
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+{% endfor %}

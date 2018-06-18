@@ -1,0 +1,23 @@
+#icinga configuration executor
+- hosts: node_list
+  vars:
+    PYTHON_PATH: "/home/webtech/envs"
+    ip: "{{inventory_hostname}}"
+    PYTHON_PACKAGE: "sre_python.tar.gz"
+
+  tasks:
+  - name: copy python tar to remote
+    copy: 
+        src: "python_container/{{PYTHON_PACKAGE}}"
+        dest: "{{ PYTHON_PATH }}"
+    
+  - name: Extracting Custom PsUtil Python
+    unarchive:
+        dest: "{{ PYTHON_PATH }}"
+        mode: 0775
+        remote_src: yes
+        src: "{{PYTHON_PATH}}/{{PYTHON_PACKAGE}}"
+  
+  - name: Running psutil
+    local_action: command /home/webtech/envs/sre_python/bin/python run_proc.py {{ip}}
+

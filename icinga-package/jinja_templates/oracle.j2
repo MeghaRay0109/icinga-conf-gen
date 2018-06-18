@@ -1,0 +1,1 @@
+vars.oracle_tns_name ={%for oracle_dict in icinga_host.oracle %} {{oracle_dict.oracle_tns_name|join(", ")}} {% endfor %}

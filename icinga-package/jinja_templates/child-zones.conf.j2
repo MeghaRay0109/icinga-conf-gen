@@ -1,0 +1,28 @@
+object Endpoint NodeName {
+}
+
+object Zone ZoneName {
+   endpoints = [ NodeName ]
+   parent = "{{hostvars[groups['satellite'][0]].ansible_nodename}}"
+}
+
+
+object Endpoint "{{hostvars[groups['satellite'][0]].ansible_nodename}}" {
+  host = "{{hostvars[groups['satellite'][0]].inventory_hostname}}"
+}
+
+object Zone "{{hostvars[groups['satellite'][0]].ansible_nodename}}" {
+   endpoints = ["{{hostvars[groups['satellite'][0]].ansible_nodename}}"]
+#   parent = "{{hostvars[groups['master'][0]].ansible_nodename}}"
+}
+
+
+object Zone "global-templates" {
+   global = true
+}
+
+
+object Zone "director-global" {
+  global = true
+}
+

@@ -1,0 +1,11 @@
+{% for java_dict in icinga_host.java %}
+{% if java_dict.port %}
+{% for p in java_dict.port %}
+    vars.java["{{p}}"] = {
+    "display_name" = "{{p}}-{{java_dict.app_name}}"
+    "app" = "{{java_dict.app_name}}"
+    "tags" = {{java_dict.tags}}
+  }
+{% endfor %}
+{% endif %}
+{% endfor %}

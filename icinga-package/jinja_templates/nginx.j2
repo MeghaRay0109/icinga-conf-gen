@@ -1,0 +1,11 @@
+{%for nginx_dict in icinga_host.nginx %}
+{% if nginx_dict.port %}
+{%for p in nginx_dict.port %}
+  vars.nginx["{{p}}"] ={
+  "display_name" = "{{p}}-{{nginx_dict.app_name}}"
+  "app" = "{{nginx_dict.app_name}}"
+  "tags" = {{nginx_dict.tags}}
+  }
+{% endfor %}
+{% endif %}
+{% endfor %}

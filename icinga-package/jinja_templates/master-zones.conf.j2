@@ -1,0 +1,18 @@
+object Endpoint NodeName {
+  host = NodeName
+}
+
+object Zone ZoneName {
+  endpoints = [ NodeName ]
+}
+object Zone "global-templates" {
+  global = true
+}
+
+object Zone "director-global" {
+  global = true
+}
+
+/*
+ * Below is the zone and endpoint info of satellites
+ */

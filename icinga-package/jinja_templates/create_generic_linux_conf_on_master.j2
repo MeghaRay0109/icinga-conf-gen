@@ -1,0 +1,25 @@
+## This is plain Linux OS related config added by ansible
+
+object Endpoint "{{ hostvars[item]['ansible_nodename'] }}" {
+}
+
+object Zone "{{ hostvars[item]['ansible_nodename'] }}" {
+  parent = "{{hostvars[groups['satellite'][0]].ansible_nodename}}"
+  endpoints = [ "{{ hostvars[item]['ansible_nodename'] }}"]
+}
+
+object Host "{{ hostvars[item]['ansible_nodename'] }}" {
+import "generic-host"
+  vars.client_endpoint = name
+  address = "{{ hostvars[item]['ansible_default_ipv4']['address'] }}"
+  address6 = "::1"
+  vars.env = "{{node_env}}"
+  vars.os = "linux"
+  vars.satellite_address = "{{hostvars[groups['satellite'][0]].ansible_default_ipv4.address}}"
+  vars.service_tags = [ ]
+  vars.disks["disk"] = {
+  }
+  vars.notification["mail"] = {
+    "groups" = [ "icingaadmins"]
+  }
+}

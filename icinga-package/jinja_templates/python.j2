@@ -1,0 +1,11 @@
+ {%for python_dict in icinga_host.python %}
+ {% if python_dict.port %}
+ {%for p in python_dict.port %}		
+  vars.python["{{p}}"] ={
+  	"display_name" = "{{p}}-{{python_dict.app_name}}"
+    "app" = "{{python_dict.app_name}}"
+    "tags" = {{python_dict.tags}}
+  }
+{% endfor %}
+{% endif %}
+{% endfor %}

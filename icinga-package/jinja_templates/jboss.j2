@@ -1,0 +1,13 @@
+{% for jboss_dict in icinga_host.jboss %}
+	{% if jboss_dict.port and jboss_dict.jmx_port %}
+		{% for p in jboss_dict.port %}
+			{% if p==jboss_dict.jmx_port %}
+				    vars.jmx["{{p}}"] = {
+				    "display_name" = "{{p}}-{{jboss_dict.app_name}}"
+				    "app" = "{{jboss_dict.app_name}}"
+				    "tags" = {{jboss_dict.tags}}
+				}
+			{% endif %}		
+		{% endfor %}
+	{% endif %}
+{% endfor %}

@@ -1,0 +1,1 @@
+vars.mysql_health_connect = {%for mysql_dict in icinga_host.mysql %} {{mysql_dict.mysql_health_connect|join(', ')}} {% endfor %}

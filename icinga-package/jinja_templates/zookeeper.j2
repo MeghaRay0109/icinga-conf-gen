@@ -1,0 +1,8 @@
+{% for zookeeper_dict in icinga_host.zookeeper %}
+	{% if zookeeper_dict.zookeeper_port %}
+    	vars.zookeeper_port["{{zookeeper_dict.zookeeper_port}}"] = {
+        	"display_name" = "{{zookeeper_dict.zookeeper_port}}-{{zookeeper_dict.app_name}}"
+    		"tags" = {{zookeeper_dict.tags}}
+		}
+	{% endif %}
+{% endfor %}

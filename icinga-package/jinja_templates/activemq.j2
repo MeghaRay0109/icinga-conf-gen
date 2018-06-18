@@ -1,0 +1,35 @@
+{% for activemq_dict in icinga_host.activemq %}
+
+  {% if activemq_dict.port%}
+    {%for p in activemq_dict.port%}
+        vars.jmx["{{p}}"] = {
+          "display-name" = "{{p}}-{{activemq_dict.app_name}}"
+          "app" = "{{activemq_dict.app_name}}"
+          "tags" = {{activemq_dict.tags}}
+        }
+    {% endfor %}
+  {% endif %}
+
+
+  vars.activemq_admin_portno = "{{activemq_dict.activemq_admin_port}}"
+  vars.activemq_portno = "{{activemq_dict.activemq_port}}"
+
+  {% if icinga_host.thresholds and p in thresholds.activemq %}
+    {% set temp_activemq = thresholds.activemq.get(p) %}
+    vars.activemq_warning = "{{temp_activemq.amq_warning}}"
+    vars.activemq_critical = "{{temp_activemq.amq_critical}}"
+  {% else %}
+    vars.activemq_warning = "{{activemq_dict.amq_warning}}"
+    vars.activemq_critical = "{{activemq_dict.amq_critical}}"
+  {% endif %}
+
+{% endfor %}
+
+
+
+
+
+
+
+
+

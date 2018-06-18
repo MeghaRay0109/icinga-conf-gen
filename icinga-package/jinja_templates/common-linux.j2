@@ -1,0 +1,25 @@
+object Endpoint "{{hostname}}" {
+
+}
+
+object Zone "{{hostname}}" {
+  parent = "{{satellite_hostname}}"
+  endpoints = [ "{{hostname}}"]
+}
+
+object Host "{{hostname}}" {
+  import "generic-host"
+  vars.client_endpoint = name
+  vars.disks["disk"] = { }
+  vars.notification["mail"] = 
+  {
+	groups = ["icingaadmins"]
+   }
+  address = "{{ address }}"
+  vars.env = "{{ environ }}"
+  vars.os = "linux"
+  vars.satellite_address = "{{ satellite_address }}"
+  vars.service_tags = [ "{{ os }}" ]
+## application based metrics and tags here
+
+}

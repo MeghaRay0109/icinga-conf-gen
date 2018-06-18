@@ -1,0 +1,86 @@
+## This is plain Hardware related config added by python
+object Endpoint "{{ host_name }}" {
+
+}
+object Zone "{{ host_name }}" {
+  parent = "{{satellite_name}}"
+  endpoints = "{{ host_name }}"
+
+}
+object Host "{{ host_name }}" {
+import "generic-host"
+  address = "{{ address }}"
+  address6 = "::1"
+  vars.env = "{{node_env}}"
+  vars.os = "{{os}}"
+  vars.satellite_address = "{{satellite_address}}"
+  vars.service_tags = {{service_tags}}
+  vars.client_endpoint = name
+  vars.notification["mail"] = {
+    groups = [ "gdit" ]
+      }
+
+{% if mount_points %}
+  {% for mount in mount_points %}
+    vars.disks["disk_{{ mount }}"] = {
+      disk_partitions = ["{{ mount }}"]
+      disk_wfree = "20%"
+      disk_cfree = "10%"
+    }
+
+  {% endfor %}
+{% else %}
+  vars.disks[] = {
+
+  }
+{% endif %}
+
+
+{% if oracle %}
+  {% include 'oracle.j2' %}
+{% endif %}
+
+{% if redis %}
+  {% include 'redis.j2' %}
+{% endif %}
+
+{% if activemq %}
+  {% include 'activemq.j2' %}
+{% endif %}
+
+{% if haproxy %}
+  {% include 'haproxy.j2' %}
+{% endif %}
+
+{% if httpd %}
+  {% include 'httpd.j2' %}
+{% endif %}
+
+{% if mongo %}
+  {% include 'mongo.j2' %}
+{% endif %}
+
+{% if mysql %}
+  {% include 'mysql.j2' %}
+{% endif %}
+
+{% if ngnix %}
+  {% include 'nginx.j2' %}
+{% endif %}
+
+{% if tomcat %}
+  {% include 'tomcat.j2' %}
+{% endif %}
+
+{% if zookeeper %}
+  {% include 'zookeeper.j2' %}
+{% endif %}
+
+{% if python %}
+  {% include 'python.j2' %}
+{% endif %}
+
+
+}
+
+

@@ -1,0 +1,108 @@
+## This is plain Hardware related config added by python
+
+
+{% if icinga_host %}
+
+object Endpoint "{{ icinga_host.host_name }}" {
+
+}
+object Zone "{{ icinga_host.host_name }}" {
+  parent = "{{icinga_host.satellite_name}}"
+  endpoints = ["{{ icinga_host.host_name }}"]
+
+}
+object Host "{{ icinga_host.host_name }}" {
+import "generic-host"
+  address = "{{ icinga_host.address }}"
+  vars.env = "{{icinga_host.node_env}}"
+  vars.os = "{{icinga_host.os}}"
+  vars.satellite_address = "{{icinga_host.satellite_address}}"
+  vars.service_tags = {{icinga_host.service_tags}}
+  vars.client_endpoint = name
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+      }
+
+{% if icinga_host.mount_points  %}
+  {% for mount in icinga_host.mount_points %}
+    vars.disks["disk_{{ mount.name }}"] = {
+      disk_partitions = ["{{ mount.name }}"]
+      {% if icinga_host.thresholds %}
+        {% set temp_mount =  icinga_host.thresholds.partitions.get(mount.name)%}
+        disk_warning = "{{temp_mount.disk_warning}}%"
+        disk_critical = "{{temp_mount.disk_critical}}%"
+      {% else %}
+        disk_warning = "20%" 
+        disk_critical = "10%"
+      {% endif %}
+    }
+  {% endfor %}
+  {% else %}
+    vars.disks[] = {
+
+    }
+{% endif %}
+
+
+{% if icinga_host.activemq %}
+  {% include 'activemq.j2' %}
+{% endif %}
+
+
+{% if icinga_host.httpd %}
+{% include 'httpd.j2' %}
+{% endif %}
+
+
+
+{% if icinga_host.mongo %}
+{% include 'mongo.j2' %}
+{% endif %}
+
+
+{% if icinga_host.mysql %}
+{% include 'mysql.j2' %}
+{% endif %}
+
+{% if icinga_host.oracle %}
+{% include 'oracle.j2' %}
+{% endif %}
+
+{% if icinga_host.nginx %}
+{% include 'nginx.j2' %}
+{% endif %}
+
+
+{% if icinga_host.redis %}
+  {% include 'redis.j2' %}
+{% endif%}
+
+{% if icinga_host.tomcat %}
+  {% include 'tomcat.j2' %}
+{% endif%}
+
+{% if icinga_host.jboss %}
+  {% include 'jboss.j2' %}
+{% endif%}
+
+
+{% if icinga_host.python %}
+  {% include 'python.j2' %}
+{% endif%}
+
+{% if icinga_host.java %}
+  {% include 'java.j2' %}
+{% endif%}
+
+
+{% if icinga_host.zookeeper %}
+  {% include 'zookeeper.j2' %}
+{% endif%}
+
+
+}
+
+
+{% endif %}
+
+

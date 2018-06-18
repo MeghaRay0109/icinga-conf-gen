@@ -1,0 +1,1 @@
+vars.mongo_db_name = {%for mongo_dict in icinga_host.mongo %} {{mongo_dict.mongo_db_name|join(', ')}} {% endfor %}

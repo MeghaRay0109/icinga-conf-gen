@@ -1,0 +1,36 @@
+#icinga configuration executor
+- hosts: node_list
+  become: yes
+  become_user: webtech
+  vars:
+    #Icinga_Home: /U01/Nova/icinga-package
+    PYTHON_PATH: /home/webtech/envs
+    ip: "{{inventory_hostname}}"
+
+  tasks:
+  - name: Create directory for ansible installation
+    file:
+        path: "{{ PYTHON_PATH }}"
+        state: "directory"
+        owner: "webtech"
+        group: "analytics"
+        mode: 0775
+  - name: scp python tar to remote
+    local_action: command scp python_container/{{item}}  {{ip}}:{{PYTHON_PATH}}
+    with_items:
+        - sre_python.tar.gz
+    
+  - name: Extracting Custom PsUtil Python
+    unarchive:
+        dest: "{{ PYTHON_PATH }}"
+        group: analytics
+        mode: 0775
+        owner: webtech
+        remote_src: yes
+        src: "{{PYTHON_PATH}}/{{item}}"
+    with_items:
+        - sre_python.tar.gz
+  
+  - name: Running psutil
+    local_action: command /U03/psutil/envs/psutil_python/sre_python/bin/python run_proc.py {{ip}}
+
