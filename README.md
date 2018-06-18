@@ -1,0 +1,1 @@
+# icinga-conf-gen
